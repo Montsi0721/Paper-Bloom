@@ -10,12 +10,12 @@ let adminSearchTriggered = false;
 const API_URL_BASE = window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : '/api';
 
 const galleryImages = [
-    '/galleryImages/flower_box.jpeg',
-    '/galleryImages/flower_box1.jpeg',
-    '/galleryImages/pink_single_rose.jpeg',
-    '/galleryImages/flower_box3.jpeg',
-    '/galleryImages/single_sunflower1.jpeg',
-    '/galleryImages/flower_box4.jpeg'
+    '/frontend/galleryImages/flower_box.jpeg',
+    '/frontend/galleryImages/flower_box1.jpeg',
+    '/frontend/galleryImages/pink_single_rose.jpeg',
+    '/frontend/galleryImages/flower_box3.jpeg',
+    '/frontend/galleryImages/single_sunflower1.jpeg',
+    '/frontend/galleryImages/flower_box4.jpeg'
 ];
 
 async function trackEvent(type, data = {}) {
