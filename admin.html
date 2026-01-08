@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaperBloom Admin Panel</title>
+    <link rel="stylesheet" href="admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PaperBloom <br> Admin Panel</h1>
+            <button class="logout-btn" id="logout-btn">Logout</button>
+        </header>
+        
+        <div id="error-container"></div>
+        <div id="success-container"></div>
+        
+        <div id="dashboard-section">
+            <div class="loading" id="loading-dashboard">
+                Loading dashboard data...
+            </div>
+            <div id="dashboard-content" style="display: none;"></div>
+        </div>
+        
+        <h2>Website Traffic Analytics</h2>
+        <div id="analytics-section">
+            <div class="analytics-controls">
+                <select id="analytics-period">
+                    <option value="7">Last 7 Days</option>
+                    <option value="14">Last 14 Days</option>
+                    <option value="30">Last 30 Days</option>
+                </select>
+            </div>
+            <div class="loading" id="loading-analytics">
+                Loading analytics...
+            </div>
+
+            <div id="analytics-content" style="display: none;">
+                <div class="analytics-stats">
+                    <div class="stat-card">
+                        <h3>Total Page Views</h3>
+                        <p id="total-views">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Product Views</h3>
+                        <p id="product-views">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Add to Cart</h3>
+                        <p id="cart-actions">0</p>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>Daily Traffic</h3>
+                    <canvas id="traffic-chart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>24-Hour Traffic</h3>
+                    <canvas id="hourly-chart"></canvas>
+                </div>
+                
+                <div id="top-products-section">
+                    <h3>Top Viewed Products</h3>
+                    <div id="top-products-list"></div>
+                </div>
+            </div>
+        </div>
+        
+        <h2>Orders Management</h2>
+        <div id="orders-section">
+            <div class="loading" id="loading-orders">
+                Loading orders...
+            </div>
+            <div id="orders-content" style="display: none;"></div>
+        </div>
+        
+        <h2>Low Stock Products</h2>
+        <div id="low-stock-section">
+            <div class="loading" id="loading-stock">
+                Loading stock data...
+            </div>
+            <div id="low-stock-content" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = window.location.origin.includes('localhost') 
+            ? 'http://localhost:5000/api' 
+            : '/api';
+        
+        let adminToken = localStorage.getItem('adminToken');
+        let trafficChart = null;
+        let hourlyChart = null;
+        
+        if (!adminToken) {
+            alert('Please log in first');
+            window.location.href = '/';
+        }
+        
+        function getSafeElement(id) {
+            const element = document.getElementById(id);
+            if (!element) {
+                console.warn(`Element with id "${id}" not found`);
+            }
+            return element;
+        }
+        
+        function showError(message, containerId = 'error-container') {
+            const container = getSafeElement(containerId);
+            if (container) {
+                container.innerHTML = `
+                    <div class="error-message">
+                        <strong>Error:</strong> ${message}
+                    </div>
+                `;
+                setTimeout(() => {
+                    if (container) {
+                        container.innerHTML = '';
+                    }
+                }, 5000);
+            }
+        }
+        
+        function showSuccess(message, containerId = 'success-container') {
+            const container = getSafeElement(containerId);
+            if (container) {
+                container.innerHTML = `
+                    <div class="success-message">
+                        <strong>Success:</strong> ${message}
+                    </div>
+                `;
+                setTimeout(() => {
+                    if (container) {
+                        container.innerHTML = '';
+                    }
+                }, 5000);
+            }
+        }
+        
+        async function fetchWithAuth(url, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${url}`, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminToken}`,
+                        ...options.headers
+                    }
+                });
+                
+                if (response.status === 401) {
+                    localStorage.removeItem('adminToken');
+                    alert('Session expired. Please log in again.');
+                    window.location.href = '/';
+                    return null;
+                }
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showError(error.message);
+                return null;
+            }
+        }
+        
+        async function loadAnalytics() {
+            try {
+                const loadingEl = getSafeElement('loading-analytics');
+                const contentEl = getSafeElement('analytics-content');
+                
+                if (!loadingEl || !contentEl) return;
+                
+                const period = document.getElementById('analytics-period').value;
+                const data = await fetchWithAuth(`/analytics/dashboard?days=${period}`);
+                
+                if (!data) return;
+                
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+                
+                // Update stats
+                document.getElementById('total-views').textContent = data.totalViews || 0;
+                
+                const productViews = data.eventCounts.find(e => e._id === 'product_view');
+                document.getElementById('product-views').textContent = productViews?.count || 0;
+                
+                const cartActions = data.eventCounts.find(e => e._id === 'add_to_cart');
+                document.getElementById('cart-actions').textContent = cartActions?.count || 0;
+                
+                // Render daily traffic chart
+                renderTrafficChart(data.dailyViews);
+                
+                // Render hourly traffic chart
+                renderHourlyChart(data.hourlyTraffic);
+                
+                // Render top products
+                renderTopProducts(data.topProducts);
+                
+            } catch (error) {
+                const loadingEl = getSafeElement('loading-analytics');
+                if (loadingEl) {
+                    loadingEl.innerHTML = '<div class="error-message">Failed to load analytics</div>';
+                }
+            }
+        }
+        
+        function renderTrafficChart(dailyViews) {
+            const ctx = document.getElementById('traffic-chart');
+            if (!ctx) return;
+            
+            // Destroy existing chart
+            if (trafficChart) {
+                trafficChart.destroy();
+            }
+            
+            const labels = dailyViews.map(d => d._id);
+            const data = dailyViews.map(d => d.count);
+            
+            trafficChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Page Views',
+                        data: data,
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function renderHourlyChart(hourlyTraffic) {
+            const ctx = document.getElementById('hourly-chart');
+            if (!ctx) return;
+            
+            if (hourlyChart) {
+                hourlyChart.destroy();
+            }
+            
+            const labels = hourlyTraffic.map(h => {
+                const date = new Date(h._id);
+                return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            });
+            const data = hourlyTraffic.map(h => h.count);
+            
+            hourlyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Visits per Hour',
+                        data: data,
+                        backgroundColor: '#3498db',
+                        borderColor: '#2980b9',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function renderTopProducts(topProducts) {
+            const container = document.getElementById('top-products-list');
+            if (!container) return;
+            
+            if (!topProducts || topProducts.length === 0) {
+                container.innerHTML = '<p>No product views yet.</p>';
+                return;
+            }
+            
+            container.innerHTML = topProducts.map((item, index) => `
+                <div class="top-product-item">
+                    <span class="rank">#${index + 1}</span>
+                    <div class="product-info">
+                        <strong>${item.product.name}</strong>
+                        <small>${item.views} views</small>
+                    </div>
+                    <span class="product-price">M${item.product.price.toFixed(2)}</span>
+                </div>
+            `).join('');
+        }
+        
+        async function loadDashboard() {
+            try {
+                const loadingEl = getSafeElement('loading-dashboard');
+                const contentEl = getSafeElement('dashboard-content');
+                
+                if (!loadingEl || !contentEl) return;
+                
+                const data = await fetchWithAuth('/admin/analytics/dashboard');
+                
+                if (!data) return;
+                
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+                
+                contentEl.innerHTML = `
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <h3>Total Revenue</h3>
+                            <p>M${data.totalRevenue?.toFixed(2) || '0.00'}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Orders</h3>
+                            <p>${data.orderCount || 0}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Low Stock Items</h3>
+                            <p>${data.lowStock?.length || 0}</p>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                const loadingEl = getSafeElement('loading-dashboard');
+                if (loadingEl) {
+                    loadingEl.innerHTML = '<div class="error-message">Failed to load dashboard data</div>';
+                }
+            }
+        }
+        
+        async function loadOrders() {
+            try {
+                const loadingEl = getSafeElement('loading-orders');
+                const contentEl = getSafeElement('orders-content');
+                
+                if (!loadingEl || !contentEl) return;
+                
+                const orders = await fetchWithAuth('/orders');
+                
+                if (!orders) return;
+                
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+                
+                if (!Array.isArray(orders) || orders.length === 0) {
+                    contentEl.innerHTML = '<p>No orders found.</p>';
+                    return;
+                }
+                
+                contentEl.innerHTML = orders.map(order => `
+                <div class="orders-grid">
+                    <div class="order-item">
+                        <div>
+                            <strong>Order #${order.orderNumber || order._id}</strong><br>
+                            <div class="order-name">${order.customerName || 'Unknown'} - ${order.phone || 'No phone'}</div>
+                        </div>
+                        <div>
+                            <span class="order-status status-${order.status.toLowerCase()}">${order.status}</span><br>
+                            <div class="order-total">Total: M${(order.total || 0).toFixed(2)}</div>
+                        </div>
+                        <div>
+                            <span class="payment-status-${order.payment.status.toLowerCase()}">Payment: ${order.payment.status}</span>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn" data-action="update-status" data-order-id="${order._id}" data-status="Processing">Process</button>
+                            <button class="btn" data-action="update-status" data-order-id="${order._id}" data-status="Shipped">Ship</button>
+                            <button class="btn" data-action="update-status" data-order-id="${order._id}" data-status="Delivered">Deliver</button>
+                            <button class="btn" data-action="update-status" data-order-id="${order._id}" data-status="Cancelled">Cancel</button>
+                            <button class="btn" data-action="update-payment" data-order-id="${order._id}" data-payment-status="Paid">Mark Paid</button>
+                            <button class="btn" data-action="update-payment" data-order-id="${order._id}" data-payment-status="Failed">Mark Failed</button>
+                        </div>
+                    </div>
+                </div>
+                `).join('');
+                
+            } catch (error) {
+                const loadingEl = getSafeElement('loading-orders');
+                if (loadingEl) {
+                    loadingEl.innerHTML = '<div class="error-message">Failed to load orders</div>';
+                }
+            }
+        }
+        
+        async function updateOrderStatus(orderId, status) {
+            if (!confirm(`Are you sure you want to mark this order as "${status}"?`)) {
+                return;
+            }
+            
+            try {
+                const result = await fetchWithAuth(`/orders/${orderId}/status`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ orderId, status })
+                });
+                
+                if (result) {
+                    showSuccess(`Order status updated to "${status}"`);
+                    loadOrders();
+                }
+            } catch (error) {
+                showError('Failed to update order status');
+            }
+        }
+        
+        async function loadLowStock() {
+            try {
+                const loadingEl = getSafeElement('loading-stock');
+                const contentEl = getSafeElement('low-stock-content');
+                
+                if (!loadingEl || !contentEl) return;
+                
+                const data = await fetchWithAuth('/admin/analytics/dashboard');
+                
+                if (!data) return;
+                
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+                
+                if (!Array.isArray(data.lowStock) || data.lowStock.length === 0) {
+                    contentEl.innerHTML = '<p>All products have sufficient stock.</p>';
+                    return;
+                }
+                
+                contentEl.innerHTML = data.lowStock.map(product => `
+                    <div class="product-item">
+                        <div>
+                            <strong>${product.name || 'Unknown'}</strong><br>
+                            <small>${product.description || 'No description'}</small>
+                        </div>
+                        <div>
+                            <span class="${(product.stock || 0) < 3 ? 'stock-warning' : 'stock-ok'}">
+                                Stock: ${product.stock || 0}
+                            </span><br>
+                            <small>Price: M${(product.price || 0).toFixed(2)}</small>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                const loadingEl = getSafeElement('loading-stock');
+                if (loadingEl) {
+                    loadingEl.innerHTML = '<div class="error-message">Failed to load stock data</div>';
+                }
+            }
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('adminToken');
+                window.location.href = '/';
+            }
+        }
+        
+        let refreshInterval;
+        function startAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+            
+            refreshInterval = setInterval(() => {
+                loadDashboard();
+                loadOrders();
+                loadLowStock();
+                loadAnalytics();
+            }, 30000);
+        }
+        
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+        
+        function handleOrderAction(event) {
+            const target = event.target;
+            
+            if (target.matches('[data-action="update-status"]')) {
+                const orderId = target.dataset.orderId;
+                const status = target.dataset.status;
+                if (orderId && status) {
+                    updateOrderStatus(orderId, status);
+                }
+            } else if (target.matches('[data-action="update-payment"]')) {
+                const orderId = target.dataset.orderId;
+                const paymentStatus = target.dataset.paymentStatus;
+                if (orderId && paymentStatus) {
+                    updatePaymentStatus(orderId, paymentStatus);
+                }
+            }
+        }
+
+        async function updatePaymentStatus(orderId, paymentStatus) {
+            try {
+                const response = await fetchWithAuth(`/orders/${orderId}/payment-status`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ paymentStatus })
+                });
+                
+                if (response) {
+                    showSuccess('Payment status updated successfully');
+                    loadOrders();
+                }
+            } catch (error) {
+                showError(`Failed to update payment status: ${error.message}`);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing admin panel...');
+            
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', logout);
+            }
+            
+            document.addEventListener('click', handleOrderAction);
+            
+            // Analytics period change
+            const analyticsPeriod = document.getElementById('analytics-period');
+            if (analyticsPeriod) {
+                analyticsPeriod.addEventListener('change', loadAnalytics);
+            }
+            
+            loadDashboard();
+            loadOrders();
+            loadLowStock();
+            loadAnalytics();
+            
+            startAutoRefresh();
+        });
+        
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                console.log('Page restored from cache, reloading data...');
+                loadDashboard();
+                loadOrders();
+                loadLowStock();
+                loadAnalytics();
+            }
+        });
+        
+        window.addEventListener('beforeunload', () => {
+            stopAutoRefresh();
+        });
+    </script>
+</body>
+</html>
