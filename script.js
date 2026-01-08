@@ -7,7 +7,7 @@ let hideNavbarTimeout;
 let products = [];
 let adminSearchTriggered = false;
 
-const API_URL_BASE = window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : '/api';
+const API_URL_BASE = 'https://paperbloomback.onrender.com/api' || 'http://localhost:5000/api';
 
 const galleryImages = [
     '/galleryImages/flower_box.jpeg',
