@@ -169,6 +169,10 @@ html {
     color: #999;
 }
 
+.sort-wrapper .material-symbols-outlined {
+    right: 1.5rem;
+}
+
 .search-wrapper input {
     padding-left: 2.5rem;
     width: 100%;
