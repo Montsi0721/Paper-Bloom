@@ -160,6 +160,7 @@ html {
 
 .search-wrapper .material-symbols-outlined {
     position: absolute;
+    width: 100%;
     right: 0.8rem;
     top: 50%;
     transform: translateY(-50%);
