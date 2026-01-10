@@ -169,17 +169,13 @@ html {
     color: #999;
 }
 
-.sort-wrapper .material-symbols-outlined {
-    right: 1.5rem;
-}
-
 .search-wrapper input {
     padding-left: 2.5rem;
     width: 100%;
 }
 
 .sort-values {
-    width: 200px;
+    width: 100%;
     appearance: none;
     padding-right: 2.5rem;
 }
