@@ -154,13 +154,15 @@ html {
     border: #222 2px solid;
 }
 
-.search-wrapper {
+.search-wrapper,
+.sort-wrapper {
     position: relative;
 }
 
-.search-wrapper .material-symbols-outlined {
+.search-wrapper .material-symbols-outlined,
+.sort-wrapper .material-symbols-outlined {
     position: absolute;
-    width: 100%;
+    border: #4299e1 1px solid;
     right: 0.8rem;
     top: 50%;
     transform: translateY(-50%);
@@ -169,19 +171,6 @@ html {
 
 .search-wrapper input {
     padding-left: 2.5rem;
-}
-
-.sort-wrapper {
-    position: relative;
-}
-
-.sort-wrapper .material-symbols-outlined {
-    position: absolute;
-    right: 0.8rem;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: #999;
 }
 
 .sort-values {
