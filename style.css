@@ -150,8 +150,6 @@ html {
     justify-content: center;
     gap: 1rem;
     margin-bottom: 2rem;
-    /* align-items: center; */
-    border: #222 2px solid;
 }
 
 .search-wrapper,
@@ -162,7 +160,6 @@ html {
 .search-wrapper .material-symbols-outlined,
 .sort-wrapper .material-symbols-outlined {
     position: absolute;
-    border: #4299e1 1px solid;
     right: 0.8rem;
     top: 50%;
     transform: translateY(-50%);
