@@ -171,6 +171,7 @@ html {
 
 .search-wrapper input {
     padding-left: 2.5rem;
+    width: 100%;
 }
 
 .sort-values {
