@@ -167,6 +167,7 @@ html {
     top: 50%;
     transform: translateY(-50%);
     color: #999;
+    pointer-events: none;
 }
 
 .search-wrapper input {
