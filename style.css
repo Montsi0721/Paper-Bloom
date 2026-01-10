@@ -150,7 +150,8 @@ html {
     justify-content: center;
     gap: 1rem;
     margin-bottom: 2rem;
-    align-items: center;
+    /* align-items: center; */
+    border: #222 2px solid;
 }
 
 .search-wrapper {
