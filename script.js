@@ -53,7 +53,7 @@ function trackOrderPlaced(orderId) {
 function checkForAdminSearch() {
     const searchInput = document.getElementById('search-input');
     const searchValue = searchInput.value.toLowerCase().trim();
-    
+
     if (searchValue === 'admin' && !adminSearchTriggered) {
         adminSearchTriggered = true;
         showAdminLogin();
@@ -64,16 +64,16 @@ function checkForAdminSearch() {
 function showAdminLogin() {
     const adminSection = document.getElementById('admin-login-section');
     adminSection.style.display = 'flex';
-    
+
     // Close admin form when clicking outside
-    adminSection.addEventListener('click', function(e) {
+    adminSection.addEventListener('click', function (e) {
         if (e.target === this) {
             hideAdminLogin();
         }
     });
-    
+
     // Add escape key to close
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             hideAdminLogin();
         }
@@ -89,7 +89,7 @@ function hideAdminLogin() {
 function togglePasswordVisibility() {
     const passwordInput = document.getElementById('admin-password');
     const btn = document.querySelector('.password-toggle-btn');
-    
+
     passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
     btn.classList.toggle('visible', passwordInput.type === 'password');
 }
@@ -101,13 +101,13 @@ async function loadProducts() {
 
         const res = await fetch(`${API_URL_BASE}/products`);
         console.log('Fetch products response:', res);
-        
+
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
-        
+
         products = await res.json();
-        
+
         products = products.map(product => ({
             ...product,
             id: product._id || product.id
@@ -116,7 +116,7 @@ async function loadProducts() {
         products.forEach(product => {
             console.log(`• ${product.id} - ${product.name}`);
         });
-        
+
         console.log('Loaded products:', products.length);
         filterProducts();
     } catch (error) {
@@ -161,7 +161,7 @@ function loadSampleProducts() {
 function filterProducts() {
     const searchInput = document.getElementById('search-input');
     const searchValue = searchInput.value.toLowerCase();
-    
+
     if (searchValue === 'admin') {
         checkForAdminSearch();
         return; // Don't filter products if searching for admin
@@ -189,17 +189,17 @@ function setCategory(cat, el) {
 
 function renderProducts(filtered) {
     const grid = document.getElementById('products-grid');
-    
+
     if (!grid) {
         console.error('products-grid element not found');
         return;
     }
-    
+
     if (filtered.length === 0) {
         grid.innerHTML = '<p class="no-products">No products found.</p>';
         return;
     }
-    
+
     grid.innerHTML = filtered.map(p => `
         <div class="product-card" data-product-id="${p.id}">
             <div class="product-overlay">
@@ -294,9 +294,9 @@ function updateCartUI() {
 
     totalOrder.textContent = payments.total;
     balOnDelivery.textContent = payments.total - payments.deposit;
-    
+
     totalEl.textContent = payments.deposit;
-    
+
     const existingPaymentInfo = document.getElementById('payment-info');
     if (existingPaymentInfo) {
         existingPaymentInfo.remove();
@@ -335,11 +335,34 @@ async function pay(method) {
     } 
 
     try {
+        const orderItems = cart.map(item => {
+            console.log('Cart item ID:', item.id, 'Type:', typeof item.id);
+            
+            // Find the corresponding product from the loaded products
+            const fullProduct = products.find(p => {
+                console.log('Comparing with product:', p.id, 'Type:', typeof p.id);
+                return p.id === item.id;
+            });
+            
+            if (!fullProduct) {
+                console.warn(`Product with ID ${item.id} not found in loaded products`);
+            }
+            
+            return {
+                productId: item.id,
+                name: item.name,
+                qty: item.qty,
+                price: item.price
+            };
+        });
+
+        console.log('Sending order items:', JSON.stringify(orderItems, null, 2));
+
         const res = await fetch(`${API_URL_BASE}/orders`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                items: cart.map(item => ({ productId: item.id, qty: item.qty })),
+                items: orderItems,
                 customerName,
                 phone,
                 paymentMethod: method
@@ -348,32 +371,53 @@ async function pay(method) {
 
         if (!res.ok) {
             const errorData = await res.json().catch(() => ({}));
-            throw new Error(errorData.message || 'Order creation failed');
+            console.error('Order creation failed:', errorData);
+            throw new Error(errorData.message || `Order creation failed (${res.status})`);
         }
 
-        const { orderId, total, deposit, payment } = await res.json();
+        const responseData = await res.json();
+        console.log('Order creation response:', responseData);
+        
+        // Extract data from response
+        const orderId = responseData.orderId || responseData._id || responseData.id;
+        const total = responseData.total || responseData.totalAmount || 0;
+        const deposit = responseData.deposit || responseData.depositAmount || (total * 0.25);
+        const payment = responseData.payment || responseData.paymentDetails || {};
 
+        if (!orderId) {
+            throw new Error('No order ID returned from server');
+        }
+
+        // Track the order
         trackOrderPlaced(orderId);
         toggleCart();
 
+        // Update confirmation modal
         const modal = document.getElementById('orderConfirmationModal');
         const orderIdText = document.getElementById('orderIdText');
         const paymentNumberText = document.getElementById('paymentNumberText');
         const paymentInstructions = document.getElementById('paymentInstructions');
         
         orderIdText.textContent = `Order ID: ${orderId}`;
-        paymentNumberText.textContent = `Payment Number: ${payment.method === 'MPESA' ? '+26657932975 (MPESA)' : '+26662806972 (ECOCASH)'}`;
-        paymentInstructions.textContent = payment.instructions;
+        
+        // Set payment number based on method
+        const paymentNumber = method === 'MPESA' ? '+26657932975' : '+26662806972';
+        const paymentMethodName = method === 'MPESA' ? 'MPESA' : 'ECOCASH';
+        paymentNumberText.textContent = `Payment Number: ${paymentNumber} (${paymentMethodName})`;
+        
+        // Set payment instructions
+        paymentInstructions.textContent = payment.instructions || 
+            `Please send M${deposit.toFixed(2)} (25% deposit) to ${paymentNumber} and include Order ID: ${orderId} as reference`;
         
         modal.style.display = 'flex';
         
+        // Set up copy buttons
         document.getElementById('copyOrderIdBtn').onclick = () => {
             navigator.clipboard.writeText(orderId).then(() => toast('Order ID copied!'));
         };
         
         document.getElementById('copyPaymentNumberBtn').onclick = () => {
-            const paymentNum = payment.method === 'MPESA' ? '+123456789' : '+987654321';
-            navigator.clipboard.writeText(paymentNum).then(() => toast('Payment Number copied!'));
+            navigator.clipboard.writeText(paymentNumber).then(() => toast('Payment Number copied!'));
         };
 
         document.getElementById('closeConfirmationBtn').onclick = () => {
@@ -383,9 +427,8 @@ async function pay(method) {
             updateCartUI();
         };
 
-        const number = method === 'MPESA' ? '+266 5792 3975' : '+266 6280 6972';
-        
     } catch (error) {
+        console.error('Error creating order:', error);
         toast('Error creating order: ' + error.message);
     }
 }
@@ -619,19 +662,19 @@ function toast(msg, showViewCart = false) {
         const viewCartBtn = document.createElement('button');
         viewCartBtn.textContent = 'View Cart';
         viewCartBtn.style.cssText = 'background:#e74c3c; color:white; border:none; padding:0.5rem 1rem; border-radius:20px; cursor:pointer; font-weight:bold; transition:all 0.3s;';
-        
+
         // Use event listener instead of inline onclick
-        viewCartBtn.addEventListener('mouseover', function() { 
-            this.style.background = '#ff7b7f'; 
+        viewCartBtn.addEventListener('mouseover', function () {
+            this.style.background = '#ff7b7f';
         });
-        viewCartBtn.addEventListener('mouseout', function() { 
-            this.style.background = '#e74c3c'; 
+        viewCartBtn.addEventListener('mouseout', function () {
+            this.style.background = '#e74c3c';
         });
-        viewCartBtn.addEventListener('click', function() {
+        viewCartBtn.addEventListener('click', function () {
             toggleCart();
             t.remove();
         });
-        
+
         t.appendChild(viewCartBtn);
     }
 
@@ -670,7 +713,7 @@ document.addEventListener('click', (e) => {
     }
 
     const target = e.target;
-    
+
     // Handle Add to Cart buttons
     if (target.matches('[data-action="add-to-cart"]') || target.closest('[data-action="add-to-cart"]')) {
         const btn = target.matches('[data-action="add-to-cart"]') ? target : target.closest('[data-action="add-to-cart"]');
@@ -679,7 +722,7 @@ document.addEventListener('click', (e) => {
         const price = parseFloat(btn.dataset.productPrice);
         addToCart(id, name, price);
     }
-    
+
     // Handle cart quantity controls
     else if (target.matches('[data-action="increase-qty"]')) {
         const id = target.dataset.itemId;
@@ -693,8 +736,7 @@ document.addEventListener('click', (e) => {
         const id = target.dataset.itemId;
         removeItem(id);
     }
-    
-    // Handle gallery items
+
     else if (target.closest('.gallery-item')) {
         const galleryItem = target.closest('.gallery-item');
         const index = parseInt(galleryItem.dataset.galleryIndex);
@@ -707,7 +749,7 @@ document.addEventListener('keydown', (e) => {
         closeModal();
         toggleTrackOrder();
     }
-    
+
     // Also close modal by clicking outside
     const modal = document.getElementById('galleryModal');
     if (e.target === modal) {
@@ -731,10 +773,10 @@ window.addEventListener('scroll', () => {
 
 document.getElementById('admin-login').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const username = document.getElementById('admin-username').value;
     const password = document.getElementById('admin-password').value;
-    
+
     try {
         const res = await fetch(`${API_URL_BASE}/admin/login`, {  // Fixed here
             method: 'POST',
@@ -744,7 +786,7 @@ document.getElementById('admin-login').addEventListener('submit', async (e) => {
                 password: password
             })
         });
-        
+
         if (res.ok) {
             try {
                 const data = await res.json();
@@ -771,19 +813,19 @@ function init() {
     renderGallery();
     updateCartUI();
     loadReviews();
-    
+
     // Add event listeners for static elements
     document.getElementById('search-input').addEventListener('input', filterProducts);
     document.getElementById('sort-select').addEventListener('change', filterProducts);
-    
+
     // Add event listener for category buttons
     document.querySelectorAll('.products-controls button[data-category]').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             const category = this.dataset.category;
             setCategory(category, this);
         });
     });
-    
+
     // Add event listener for cart toggle
     const cartToggleBtn = document.getElementById('cart-toggle-btn');
     if (cartToggleBtn) {
@@ -794,79 +836,79 @@ function init() {
     if (cartCloseBtn) {
         cartCloseBtn.addEventListener('click', toggleCart);
     }
-    
+
     // Add event listener for track order
     const trackOrderBtn = document.getElementById('track-order-btn');
     if (trackOrderBtn) {
         trackOrderBtn.addEventListener('click', toggleTrackOrder);
     }
-    
+
     const trackOrderCloseBtn = document.getElementById('track-order-close-btn');
     if (trackOrderCloseBtn) {
         trackOrderCloseBtn.addEventListener('click', toggleTrackOrder);
     }
-    
+
     const trackOrderSubmitBtn = document.getElementById('track-order-submit-btn');
     if (trackOrderSubmitBtn) {
         trackOrderSubmitBtn.addEventListener('click', trackOrder);
     }
-    
+
     // Add event listener for payment buttons
     document.querySelectorAll('[data-payment-method]').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             const method = this.dataset.paymentMethod;
             pay(method);
         });
     });
-    
+
     // Add event listener for shop collection button
     const shopCollectionBtn = document.getElementById('shop-collection-btn');
     if (shopCollectionBtn) {
-        shopCollectionBtn.addEventListener('click', function() {
-            document.getElementById('products').scrollIntoView({behavior: 'smooth'});
+        shopCollectionBtn.addEventListener('click', function () {
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
         });
     }
-    
+
     // Add event listener for modal close button
     const modalCloseBtn = document.getElementById('modal-close-btn');
     if (modalCloseBtn) {
         modalCloseBtn.addEventListener('click', closeModal);
     }
-    
+
     // Add event listener for review form
     const reviewForm = document.getElementById('review-form');
     if (reviewForm) {
         reviewForm.addEventListener('submit', submitReview);
     }
-    
+
     // Add event listener for contact form
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
             toast('Contact form submitted! We\'ll get back to you soon.');
             this.reset();
         });
     }
-    
+
     // Add event listener for back to top button
     const backToTopBtn = document.getElementById('backToTop');
     if (backToTopBtn) {
-        backToTopBtn.addEventListener('click', function() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
+        backToTopBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
-    
+
     // Add event listener for hamburger menu
     const hamburgerMenu = document.getElementById('hamburger-menu');
     if (hamburgerMenu) {
         hamburgerMenu.addEventListener('click', toggleMenu);
     }
-    
+
     // Handle gallery modal outside click
     const galleryModal = document.getElementById('galleryModal');
     if (galleryModal) {
-        galleryModal.addEventListener('click', function(e) {
+        galleryModal.addEventListener('click', function (e) {
             if (e.target === this) {
                 closeModal();
             }
