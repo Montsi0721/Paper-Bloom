@@ -393,7 +393,7 @@ async function pay(method) {
             throw new Error('No order ID returned from server');
         }
 
-        loader.style.display = 'inline-block';
+        loader.style.display = 'none';
         
         trackOrderPlaced(orderId);
 

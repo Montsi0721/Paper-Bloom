@@ -1075,3 +1075,13 @@ footer a {
     transform: rotate(360deg);
   }
 } 
+
+#order-loader {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+}
