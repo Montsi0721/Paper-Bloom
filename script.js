@@ -358,6 +358,11 @@ async function pay(method) {
 
         console.log('Sending order items:', JSON.stringify(orderItems, null, 2));
 
+        toggleCart();
+
+        const loader = document.getElementById('order-loader');
+        loader.style.display = 'inline-block';
+
         const res = await fetch(`${API_URL_BASE}/orders`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -388,9 +393,9 @@ async function pay(method) {
             throw new Error('No order ID returned from server');
         }
 
-        // Track the order
+        loader.style.display = 'inline-block';
+        
         trackOrderPlaced(orderId);
-        toggleCart();
 
         // Update confirmation modal
         const modal = document.getElementById('orderConfirmationModal');
