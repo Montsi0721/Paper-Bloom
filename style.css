@@ -1088,6 +1088,8 @@ footer a {
     z-index: 2000;
 }
 
-#order-loader div .loader {
-    transform: translateX(50%);
+#order-loader > div > .loader {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
