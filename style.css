@@ -1090,6 +1090,6 @@ footer a {
 
 #order-loader > div > .loader {
     position: absolute;
-    left: 40%;
+    left: 45%;
     transform: translateX(-60%);
 }
