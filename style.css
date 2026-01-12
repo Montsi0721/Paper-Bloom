@@ -1089,6 +1089,5 @@ footer a {
 }
 
 #order-loader div .loader {
-    margin-left: 50%;
-    transform: translateX(calc(50% - 48px));
+    transform: translateX(calc(40%));
 }
