@@ -7,7 +7,7 @@ let hideNavbarTimeout;
 let products = [];
 let adminSearchTriggered = false;
 
-const API_URL_BASE = 'https://paperbloomback.onrender.com/api' || 'http://localhost:5000/api';
+const API_URL_BASE = 'https://paperbloomback.onrender.com/api';
 
 const galleryImages = [
     '/galleryImages/flower_box.jpeg',
@@ -108,10 +108,9 @@ async function loadProducts() {
         
         products = await res.json();
         
-        // Add id field if it doesn't exist (MongoDB uses _id)
         products = products.map(product => ({
             ...product,
-            id: product._id || product.id  // Use _id from MongoDB
+            id: product._id || product.id
         }));
         
         console.log('Loaded products:', products.length);
