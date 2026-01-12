@@ -351,8 +351,8 @@ async function pay(method) {
             return {
                 productId: item.id,
                 // name: item.name,
-                qty: item.qty,
-                price: item.price
+                qty: item.qty
+                // price: item.price
             };
         });
 
