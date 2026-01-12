@@ -1087,3 +1087,7 @@ footer a {
     backdrop-filter: blur(5px);
     z-index: 2000;
 }
+
+#order-loader div .loader {
+    margin-left: 50%;
+}
