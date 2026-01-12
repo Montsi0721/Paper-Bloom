@@ -96,6 +96,9 @@ function togglePasswordVisibility() {
 
 async function loadProducts() {
     try {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'inline-block';
+
         const res = await fetch(`${API_URL_BASE}/products`);
         console.log('Fetch products response:', res);
         
@@ -116,6 +119,9 @@ async function loadProducts() {
     } catch (error) {
         console.error('Error loading products:', error);
         loadSampleProducts();
+    } finally {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
     }
 }
 
