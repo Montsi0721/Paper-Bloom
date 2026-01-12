@@ -361,7 +361,7 @@ async function pay(method) {
         toggleCart();
 
         const loader = document.getElementById('order-loader');
-        loader.style.display = 'inline-block';
+        loader.style.display = 'flex';
 
         const res = await fetch(`${API_URL_BASE}/orders`, {
             method: 'POST',
