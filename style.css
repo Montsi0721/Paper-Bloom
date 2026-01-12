@@ -1089,5 +1089,5 @@ footer a {
 }
 
 #order-loader div .loader {
-    transform: translateX(calc(40%));
+    transform: translateX(40%);
 }
