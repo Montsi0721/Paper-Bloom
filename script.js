@@ -112,6 +112,10 @@ async function loadProducts() {
             ...product,
             id: product._id || product.id
         }));
+
+        products.forEach(product => {
+            console.log(`• ${product.id} - ${product.name}`);
+        });
         
         console.log('Loaded products:', products.length);
         filterProducts();
