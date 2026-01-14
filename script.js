@@ -203,7 +203,15 @@ function renderProducts(filtered) {
     grid.innerHTML = filtered.map(p => `
         <div class="product-card" data-product-id="${p.id}">
             <div class="product-overlay">
-                <img src="${p.image}" alt="${p.name}" class="product-image" loading="lazy">
+                <img 
+                    src="${p.image}" 
+                    alt="${p.name}" 
+                    class="product-image" 
+                    loading="lazy"
+                    data-modal-type="product"
+                    data-modal-src="${p.image}"
+                    data-modal-caption="${p.name}"
+                >
                 <div class="overlay">
                     <div class="product-info">
                         <div class="product-description">
@@ -742,10 +750,37 @@ document.addEventListener('click', (e) => {
         removeItem(id);
     }
 
-    else if (target.closest('.gallery-item')) {
-        const galleryItem = target.closest('.gallery-item');
-        const index = parseInt(galleryItem.dataset.galleryIndex);
-        openModal(index);
+    // else if (target.closest('.gallery-item')) {
+    //     const galleryItem = target.closest('.gallery-item');
+    //     const index = parseInt(galleryItem.dataset.galleryIndex);
+    //     openModal(index);
+    // }
+
+    // Image modal trigger (works for both gallery and products)
+    if (target.tagName === 'IMG' && target.hasAttribute('data-modal-src')) {
+        const src = target.getAttribute('data-modal-src');
+        const caption = target.getAttribute('data-modal-caption') || '';
+        
+        const modal = document.getElementById('galleryModal');
+        const modalImg = document.getElementById('modalImage');
+        
+        modalImg.src = src;
+        modalImg.alt = caption;
+        
+        // Optional: add caption below image
+        let captionEl = modal.querySelector('.modal-caption');
+        if (!captionEl) {
+            captionEl = document.createElement('p');
+            captionEl.className = 'modal-caption';
+            captionEl.style.color = 'white';
+            captionEl.style.marginTop = '1rem';
+            captionEl.style.fontSize = '1.2rem';
+            modal.querySelector('.modal-content').appendChild(captionEl);
+        }
+        captionEl.textContent = caption;
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
 });
 

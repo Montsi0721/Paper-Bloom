@@ -1093,3 +1093,27 @@ footer a {
     left: 45%;
     transform: translateX(-60%);
 }
+
+/* Better modal image handling */
+#modalImage {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+
+/* Optional caption styling */
+.modal-caption {
+    color: white;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.3rem;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+}
+
+/* Make cursor indicate clickable images */
+.product-image[data-modal-src],
+.gallery-item img {
+    cursor: zoom-in;
+}
