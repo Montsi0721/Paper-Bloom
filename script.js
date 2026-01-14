@@ -241,10 +241,45 @@ function renderGallery() {
     `).join('');
 }
 
-function openModal(index) {
+// function openModal(index) {
+//     const modal = document.getElementById('galleryModal');
+//     const modalImage = document.getElementById('modalImage');
+//     modalImage.src = galleryImages[index];
+//     modal.classList.add('active');
+//     document.body.style.overflow = 'hidden';
+// }
+
+// function closeModal() {
+//     const modal = document.getElementById('galleryModal');
+//     modal.classList.remove('active');
+//     document.body.style.overflow = 'auto';
+// }
+
+// Replace the existing openModal function with these:
+
+function openModal(index, src, caption) {
+    // For backward compatibility with gallery
+    openImageModal(src, caption);
+}
+
+function openImageModal(src, caption) {
     const modal = document.getElementById('galleryModal');
-    const modalImage = document.getElementById('modalImage');
-    modalImage.src = galleryImages[index];
+    const modalImg = document.getElementById('modalImage');
+    
+    // Set image source
+    modalImg.src = src;
+    modalImg.alt = caption;
+    
+    // Create or update caption
+    let captionEl = modal.querySelector('.modal-caption');
+    if (!captionEl) {
+        captionEl = document.createElement('p');
+        captionEl.className = 'modal-caption';
+        modal.querySelector('.modal-content').appendChild(captionEl);
+    }
+    captionEl.textContent = caption;
+    
+    // Show modal
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
@@ -253,6 +288,10 @@ function closeModal() {
     const modal = document.getElementById('galleryModal');
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
+    
+    // Clear the image source to prevent showing old image on next open
+    const modalImg = document.getElementById('modalImage');
+    modalImg.src = '';
 }
 
 function addToCart(id, name, price) {
@@ -781,6 +820,26 @@ document.addEventListener('click', (e) => {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
+
+    // Handle gallery item clicks
+    else if (target.closest('.gallery-item')) {
+        const galleryItem = target.closest('.gallery-item');
+        const index = parseInt(galleryItem.dataset.galleryIndex);
+        openModal(index, galleryImages[index], ``);
+    }
+
+    // Handle product image clicks (new)
+    else if (target.classList.contains('product-image') && target.hasAttribute('data-modal-src')) {
+        const src = target.getAttribute('data-modal-src');
+        const caption = target.getAttribute('data-modal-caption') || '';
+        const productId = target.closest('.product-card')?.dataset.productId;
+        
+        if (productId) {
+            trackProductView(productId);
+        }
+        
+        openImageModal(src, caption);
+    }
 });
 
 document.addEventListener('keydown', (e) => {
@@ -790,9 +849,19 @@ document.addEventListener('keydown', (e) => {
     }
 
     // Also close modal by clicking outside
-    const modal = document.getElementById('galleryModal');
-    if (e.target === modal) {
-        closeModal();
+    // const modal = document.getElementById('galleryModal');
+    // if (e.target === modal) {
+    //     closeModal();
+    // }
+
+    // Handle modal outside click
+    const galleryModal = document.getElementById('galleryModal');
+    if (galleryModal) {
+        galleryModal.addEventListener('click', function (e) {
+            if (e.target === this || e.target.classList.contains('modal-close')) {
+                closeModal();
+            }
+        });
     }
 });
 
