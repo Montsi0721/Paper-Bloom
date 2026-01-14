@@ -29,6 +29,7 @@ html {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
+/* ===== NAVBAR ===== */
 .navbar {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     padding: 1rem 2rem;
@@ -107,6 +108,7 @@ html {
     cursor: pointer;
 }
 
+/* ===== HERO SECTION ===== */
 .hero {
     height: 80vh;
     background: linear-gradient(rgba(255, 154, 158, 0.7), rgba(254, 201, 239, 0.7)), url('https://c02.purpledshub.com/uploads/sites/51/2024/03/Hero-Origami-Flower-Bouquet-1-scaled.jpg?webp=1&w=1200');
@@ -130,6 +132,7 @@ html {
     margin-bottom: 2rem;
 }
 
+/* ===== PRODUCTS SECTION ===== */
 #products {
     padding: 6rem 2rem;
     max-width: 1200px;
@@ -281,6 +284,7 @@ select option:checked {
     opacity: 1;
 }
 
+/* ===== GALLERY SECTION ===== */
 #gallery {
     padding: 6rem 2rem;
     max-width: 1200px;
@@ -340,6 +344,7 @@ select option:checked {
     opacity: 1;
 }
 
+/* ===== GALLERY MODAL ===== */
 .gallery-modal {
     display: none;
     position: fixed;
@@ -379,6 +384,7 @@ select option:checked {
     border: none;
 }
 
+/* ===== BUTTONS ===== */
 .btn {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: var(--light);
@@ -390,6 +396,7 @@ select option:checked {
     transition: all 0.3s;
 }
 
+/* ===== CART ===== */
 .cart {
     position: fixed;
     top: 10px;
@@ -426,12 +433,11 @@ select option:checked {
     background: #ff7b7f;
 }
 
-/* Add spacing for cart items container */
 #cart-items {
-    max-height: 40vh; /* Limit height of cart items */
-    overflow-y: auto; /* Make cart items scrollable if needed */
+    max-height: 40vh;
+    overflow-y: auto;
     margin: 1rem 0;
-    padding-right: 5px; /* Space for scrollbar */
+    padding-right: 5px;
 }
 
 #cart-items::-webkit-scrollbar {
@@ -491,43 +497,11 @@ select option:checked {
     margin-top: 10px;
 }
 
-/* Payment summary stays visible */
 .cart > div:nth-last-child(3) {
     position: sticky;
-    bottom: 100px; /* Position above buttons */
+    bottom: 100px;
     background: var(--light);
     z-index: 1;
-}
-
-@media (max-width: 768px) {
-    .cart {
-        position: fixed;
-        inset: 0;
-        margin: 10px;
-        max-width: 100%;
-    }
-
-    /* .cardBtns {
-        display: grid;
-        grid-template-columns: 2fr;
-    } */
-}
-
-/* Add smooth scrolling */
-.cart, #cart-items {
-    scroll-behavior: smooth;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
 }
 
 .cart-item {
@@ -554,8 +528,18 @@ select option:checked {
     cursor: pointer;
 }
 
-/* Add to existing style.css file at the end */
+@keyframes slideIn {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
 
+/* ===== TRACK ORDER MODAL ===== */
 .track-order-modal {
     display: none;
     position: fixed;
@@ -590,55 +574,6 @@ select option:checked {
     margin-top: 2rem;
     padding-left: 1rem;
     border-left: 3px solid var(--primary);
-}
-
-.timeline-step {
-    position: relative;
-    margin-bottom: 1.5rem;
-    padding-left: 1.5rem;
-}
-
-.timeline-step.active .timeline-marker {
-    background: var(--primary);
-    border-color: var(--primary);
-}
-
-.timeline-marker {
-    position: absolute;
-    left: -0.7rem;
-    top: 0;
-    width: 1rem;
-    height: 1rem;
-    border-radius: 50%;
-    background: white;
-    border: 3px solid #ddd;
-}
-
-.timeline-content {
-    background: #f9f9f9;
-    padding: 1rem;
-    border-radius: 8px;
-}
-
-.timeline-content h6 {
-    margin: 0 0 0.5rem 0;
-    color: var(--dark);
-}
-
-.timeline-content p {
-    margin: 0 0 0.5rem 0;
-    color: #666;
-}
-
-.timeline-content small {
-    color: #999;
-}
-
-@media (max-width: 768px) {
-    .track-order-content {
-        width: 95%;
-        padding: 1.5rem;
-    }
 }
 
 .timeline {
@@ -679,6 +614,7 @@ select option:checked {
     border-radius: 8px;
 }
 
+/* ===== ORDER CONFIRMATION ===== */
 .order-confirmation-modal {
     position: fixed;
     top: 0;
@@ -691,6 +627,7 @@ select option:checked {
     align-items: center;
     z-index: 1000;
 }
+
 .order-confirmation-modal .modal-content {
     background: white;
     padding: 20px;
@@ -708,6 +645,7 @@ select option:checked {
     cursor: pointer;
 }
 
+/* ===== SECTIONS CONTAINER ===== */
 .sections-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -749,6 +687,7 @@ select option:checked {
     font-size: 1.1rem;
 }
 
+/* ===== REVIEW FORM ===== */
 .review-form {
     max-width: 600px;
     margin: 0 auto 3rem;
@@ -775,6 +714,7 @@ select option:checked {
     color: #ffd700;
 }
 
+/* ===== CONTACT FORM ===== */
 .contact-form {
     max-width: 600px;
     margin: 0 auto;
@@ -860,6 +800,7 @@ select option:checked {
     font-size: 1.1rem;
 }
 
+/* ===== FOOTER ===== */
 footer {
     background: var(--dark);
     color: #bbb;
@@ -889,56 +830,7 @@ footer a {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-@media (max-width: 768px) {
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--primary);
-        padding: 1rem;
-        z-index: 1001;
-    }
-
-    .nav-links.active {
-        display: flex;
-    }
-
-    .hamburger {
-        display: block;
-    }
-
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-
-    .hero {
-        height: 60vh;
-    }
-
-    .products-controls {
-        flex-direction: column;
-    }
-
-    .gallery-container {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    }
-
-    .sections-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 0 1rem 4rem;
-    }
-    
-    #reviews, 
-    #contact {
-        padding: 2rem 0;
-    }
-}
-
-
+/* ===== ADMIN LOGIN ===== */
 #admin-login-section {
     position: fixed;
     top: 0;
@@ -963,7 +855,7 @@ footer a {
 }
 
 .admin-login-container h2 {
-    color: var(--primary-color);
+    color: var(--primary);
     margin-bottom: 1.5rem;
     font-size: 1.8rem;
 }
@@ -984,7 +876,7 @@ footer a {
 }
 
 #admin-login input:focus {
-    border-color: var(--primary-color);
+    border-color: var(--primary);
     background: white;
     outline: none;
 }
@@ -1004,21 +896,10 @@ footer a {
     top: -0.6rem;
     left: 0.8rem;
     font-size: 0.8rem;
-    color: var(--primary-color);
+    color: var(--primary);
     background: white;
     padding: 0 0.3rem;
-    border: #222 2px solid;
     border-radius: 4px;
-}
-
-#admin-login input:not(:focus),
-#admin-login input:not(:placeholder-shown) + label {
-    border: #ddd 2px solid;
-}
-
-.form-group {
-    position: relative;
-    margin-bottom: 1.5rem;
 }
 
 .password-toggle-btn {
@@ -1061,21 +942,23 @@ footer a {
 }
 
 #admin-password {
-    padding-right: 50px; /* Prevents text overlap with the toggle */
+    padding-right: 50px;
 }
 
+/* ===== LOADER ===== */
 .loader {
-  width: 48px;
-  height: 48px;
-  border: 3px solid #333;
-  border-radius: 50%;
-  margin: 0 auto;
-  margin-top: 40px;
-  display: inline-block;
-  position: relative;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
+    width: 48px;
+    height: 48px;
+    border: 3px solid #333;
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-top: 40px;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
 }
+
 .loader::after {
     content: '';  
     box-sizing: border-box;
@@ -1089,15 +972,15 @@ footer a {
     border: 3px solid transparent;
     border-bottom-color: #e74c3c;
 }
-    
+
 @keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-} 
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 #order-loader {
     position: fixed;
@@ -1117,31 +1000,7 @@ footer a {
     transform: translateX(-60%);
 }
 
-/* Better modal image handling */
-#modalImage {
-    max-width: 90vw;
-    max-height: 85vh;
-    object-fit: contain;
-    border-radius: 12px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-}
-
-/* Optional caption styling */
-.modal-caption {
-    color: white;
-    text-align: center;
-    margin-top: 1rem;
-    font-size: 1.3rem;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
-}
-
-/* Make cursor indicate clickable images */
-.product-image[data-modal-src],
-.gallery-item img {
-    cursor: zoom-in;
-}
-
-
+/* ===== ABOUT SECTION ===== */
 #about {
     padding: 6rem 2rem;
     max-width: 1200px;
@@ -1223,8 +1082,107 @@ footer a {
     text-align: left;
 }
 
-/* Mobile adjustments */
+/* ===== MODAL IMAGES ===== */
+#modalImage {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+
+.modal-caption {
+    color: white;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.3rem;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+}
+
+.product-image[data-modal-src],
+.gallery-item img {
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+}
+
+.product-image[data-modal-src]:hover,
+.gallery-item img:hover {
+    transform: scale(1.02);
+}
+
+.product-overlay {
+    position: relative;
+}
+
+.product-overlay .overlay {
+    pointer-events: none;
+}
+
+.product-overlay .product-info {
+    pointer-events: auto;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--primary);
+        padding: 1rem;
+        z-index: 1001;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero {
+        height: 60vh;
+    }
+
+    .products-controls {
+        flex-direction: column;
+    }
+
+    .gallery-container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .sections-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1rem 4rem;
+    }
+    
+    #reviews, 
+    #contact {
+        padding: 2rem 0;
+    }
+
+    .cart {
+        position: fixed;
+        inset: 0;
+        margin: 10px;
+        max-width: 100%;
+    }
+
+    .track-order-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
     #about {
         padding: 4.5rem 1.5rem;
     }
@@ -1240,67 +1198,4 @@ footer a {
     .about-highlights {
         grid-template-columns: 1fr;
     }
-
-    /* .about-highlights li {
-        padding: 1.3rem 1.1rem 1.3rem 4.2rem;
-    } */
-}
-
-/* Add these styles to your existing style.css */
-
-/* Ensure modal content scales properly for all images */
-.modal-content {
-    max-width: 90vw;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content img {
-    max-width: 100%;
-    max-height: 80vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 10px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
-}
-
-.modal-caption {
-    color: white;
-    text-align: center;
-    margin-top: 1rem;
-    font-size: 1.3rem;
-    font-weight: 500;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
-    padding: 0.5rem 1rem;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-}
-
-/* Make cursor indicate clickable images */
-.product-image[data-modal-src],
-.gallery-item img {
-    cursor: zoom-in;
-    transition: transform 0.3s ease;
-}
-
-.product-image[data-modal-src]:hover,
-.gallery-item img:hover {
-    transform: scale(1.02);
-}
-
-/* Ensure product overlay doesn't interfere with clicking */
-.product-overlay {
-    position: relative;
-}
-
-.product-overlay .overlay {
-    pointer-events: none; /* Allow clicks to pass through to image */
-}
-
-.product-overlay .product-info {
-    pointer-events: auto; /* But still allow interaction with cart button */
 }
