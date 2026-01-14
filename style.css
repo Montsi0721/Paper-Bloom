@@ -480,7 +480,6 @@ select option:checked {
     z-index: 1;
 }
 
-/* Mobile responsiveness */
 @media (max-width: 768px) {
     .cart {
         position: fixed;
@@ -497,7 +496,10 @@ select option:checked {
     .cardBtns .btn:last-child {
         width: fit-content;
         margin-left: 100%;
+    }
 
+    .cardBtns .btn:not(.btn:last-child) {
+        margin-bottom: -25px;
     }
 }
 
