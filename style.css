@@ -1192,10 +1192,6 @@ footer a {
     font-family: 'Material Symbols Outlined';
     color: var(--primary);
     font-size: 1.6rem;
-    /* position: absolute;
-    left: 1.2rem;
-    top: 20%;
-    transform: translateY(-20%); */
 }
 
 .about-highlights li span {
