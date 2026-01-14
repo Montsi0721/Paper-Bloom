@@ -902,6 +902,12 @@ footer a {
     border-radius: 4px;
 }
 
+#admin-login input:not(:focus),
+#admin-login input:not(:placeholder-shown) {
+    border: 2px solid var(--primary);
+    background: white;
+}
+
 .password-toggle-btn {
     position: absolute;
     right: 10px;
