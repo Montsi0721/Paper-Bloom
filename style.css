@@ -1218,7 +1218,7 @@ footer a {
         grid-template-columns: 1fr;
     }
 
-    .about-highlights li {
+    /* .about-highlights li {
         padding: 1.3rem 1.1rem 1.3rem 4.2rem;
-    }
+    } */
 }
