@@ -1188,7 +1188,7 @@ footer a {
 }
 
 .about-highlights li::before {
-    content: "check_circle";
+    content: "check_circle<br>";
     font-family: 'Material Symbols Outlined';
     color: var(--primary);
     font-size: 1.6rem;
