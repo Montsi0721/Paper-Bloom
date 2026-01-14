@@ -757,7 +757,7 @@ document.addEventListener('click', (e) => {
     // }
 
     // Image modal trigger (works for both gallery and products)
-    if (target.tagName === 'IMG' && target.hasAttribute('data-modal-src')) {
+    else if (target.tagName === 'IMG' && target.hasAttribute('data-modal-src')) {
         const src = target.getAttribute('data-modal-src');
         const caption = target.getAttribute('data-modal-caption') || '';
         
