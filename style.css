@@ -498,8 +498,9 @@ select option:checked {
         margin-left: 100%;
     }
 
-    .cardBtns .btn:not(.btn:last-child) {
-        margin-bottom: -25px;
+    .cardBtns .btn:not(.btn:last-child),
+    .cardBtns .btn:not(.btn:first-child) {
+        margin-bottom: -75px;
     }
 }
 
