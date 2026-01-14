@@ -241,21 +241,19 @@ function renderGallery() {
     `).join('');
 }
 
-// function openModal(index) {
-//     const modal = document.getElementById('galleryModal');
-//     const modalImage = document.getElementById('modalImage');
-//     modalImage.src = galleryImages[index];
-//     modal.classList.add('active');
-//     document.body.style.overflow = 'hidden';
-// }
+function openModal(index) {
+    const modal = document.getElementById('galleryModal');
+    const modalImage = document.getElementById('modalImage');
+    modalImage.src = galleryImages[index];
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
 
 // function closeModal() {
 //     const modal = document.getElementById('galleryModal');
 //     modal.classList.remove('active');
 //     document.body.style.overflow = 'auto';
 // }
-
-// Replace the existing openModal function with these:
 
 function openModal(index, src, caption) {
     // For backward compatibility with gallery
