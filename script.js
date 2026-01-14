@@ -249,16 +249,10 @@ function openModal(index) {
     document.body.style.overflow = 'hidden';
 }
 
-// function closeModal() {
-//     const modal = document.getElementById('galleryModal');
-//     modal.classList.remove('active');
-//     document.body.style.overflow = 'auto';
+// function openModal(index, src, caption) {
+//     // For backward compatibility with gallery
+//     openImageModal(src, caption);
 // }
-
-function openModal(index, src, caption) {
-    // For backward compatibility with gallery
-    openImageModal(src, caption);
-}
 
 function openImageModal(src, caption) {
     const modal = document.getElementById('galleryModal');
@@ -790,31 +784,31 @@ document.addEventListener('click', (e) => {
         openModal(index);
     }
 
-    else if (target.tagName === 'IMG' && target.hasAttribute('data-modal-src')) {
-        const src = target.getAttribute('data-modal-src');
-        const caption = target.getAttribute('data-modal-caption') || '';
+    // else if (target.tagName === 'IMG' && target.hasAttribute('data-modal-src')) {
+    //     const src = target.getAttribute('data-modal-src');
+    //     const caption = target.getAttribute('data-modal-caption') || '';
         
-        const modal = document.getElementById('galleryModal');
-        const modalImg = document.getElementById('modalImage');
+    //     const modal = document.getElementById('galleryModal');
+    //     const modalImg = document.getElementById('modalImage');
         
-        modalImg.src = src;
-        modalImg.alt = caption;
+    //     modalImg.src = src;
+    //     modalImg.alt = caption;
         
-        // Optional: add caption below image
-        let captionEl = modal.querySelector('.modal-caption');
-        if (!captionEl) {
-            captionEl = document.createElement('p');
-            captionEl.className = 'modal-caption';
-            captionEl.style.color = 'white';
-            captionEl.style.marginTop = '1rem';
-            captionEl.style.fontSize = '1.2rem';
-            modal.querySelector('.modal-content').appendChild(captionEl);
-        }
-        captionEl.textContent = caption;
+    //     // Optional: add caption below image
+    //     let captionEl = modal.querySelector('.modal-caption');
+    //     if (!captionEl) {
+    //         captionEl = document.createElement('p');
+    //         captionEl.className = 'modal-caption';
+    //         captionEl.style.color = 'white';
+    //         captionEl.style.marginTop = '1rem';
+    //         captionEl.style.fontSize = '1.2rem';
+    //         modal.querySelector('.modal-content').appendChild(captionEl);
+    //     }
+    //     captionEl.textContent = caption;
         
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
+    //     modal.classList.add('active');
+    //     document.body.style.overflow = 'hidden';
+    // }
 
     // Handle gallery item clicks
     // else if (target.closest('.gallery-item')) {
