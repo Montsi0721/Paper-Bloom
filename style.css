@@ -479,7 +479,7 @@ select option:checked {
     text-align: left;
 }
 
-.cardBtns .btn:not(:first-child) {
+.cardBtns .btn:not(:first-child), .cardBtns .payment-buttons .btn:not(:last-child) {
     margin-bottom: 0;
     background: #999;
     height: fit-content;
