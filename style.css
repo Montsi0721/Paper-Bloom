@@ -488,6 +488,11 @@ select option:checked {
         margin: 10px;
         max-width: 100%;
     }
+
+    .cardBtns {
+        display: grid;
+        grid-template-columns: 2fr;
+    }
 }
 
 /* Add smooth scrolling */
