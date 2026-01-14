@@ -479,6 +479,12 @@ select option:checked {
     text-align: left;
 }
 
+.cardBtns .btn:not(:first-child) {
+    margin-bottom: 0;
+    background: #999;
+    height: fit-content;
+}
+
 /* .cardBtns .btn:last-child{
     background: #999;
     width: auto;
