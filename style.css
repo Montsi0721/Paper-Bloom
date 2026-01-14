@@ -496,7 +496,7 @@ select option:checked {
 
     .cardBtns .btn:last-child {
         width: fit-content;
-        margin-left: 90%;
+        margin-left: 100%;
 
     }
 }
