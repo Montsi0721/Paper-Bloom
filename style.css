@@ -479,21 +479,20 @@ select option:checked {
     text-align: left;
 }
 
-.cardBtns .btn:last-child, .payment-buttons .btn:not(:last-child){
+/* .cardBtns .btn:last-child{
     background: #999;
     width: auto;
     min-width: 100px;
     margin-top: 0;
     align-self: flex-end;
-}
+} */
 
 .payment-buttons {
     width: 70%;
-    border: #222 solid 2px;
 }
 
 .payment-buttons .btn {
-    margin-top: 10px;
+    margin-top: 3rem;
 }
 
 /* Payment summary stays visible */
