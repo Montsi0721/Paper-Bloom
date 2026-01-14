@@ -1194,8 +1194,8 @@ footer a {
     font-size: 1.6rem;
     position: absolute;
     left: 1.2rem;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 20%;
+    transform: translateY(-20%);
 }
 
 .about-highlights li span {
