@@ -488,21 +488,8 @@ select option:checked {
 }
 
 .payment-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    flex: 1;
-}
-
-/* For mobile responsiveness */
-@media (max-width: 768px) {
-    .cardBtns .btn:last-child {
-        align-self: flex-end;
-        margin-top: 0.5rem;
-        width: auto;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-    }
+    width: 60%;
+    border: #222 solid 2px;
 }
 
 /* Payment summary stays visible */
@@ -521,15 +508,10 @@ select option:checked {
         max-width: 100%;
     }
 
-    .cardBtns {
+    /* .cardBtns {
         display: grid;
         grid-template-columns: 2fr;
-    }
-
-    .cardBtns .btn:last-child {
-        width: fit-content;
-        margin-left: 100%;
-    }
+    } */
 }
 
 /* Add smooth scrolling */
