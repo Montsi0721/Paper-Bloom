@@ -492,7 +492,7 @@ select option:checked {
 }
 
 .payment-buttons .btn {
-    margin-top: 1rem;
+    margin-top: 10px;
 }
 
 /* Payment summary stays visible */
