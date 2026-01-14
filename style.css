@@ -495,7 +495,7 @@ select option:checked {
     }
 
     .cardBtns .btn:last-child {
-        position: fixed;
+        position: static;
         bottom: 10px;
         right: 10px;
         width: fit-content;
