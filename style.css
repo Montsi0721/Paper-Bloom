@@ -1117,3 +1117,112 @@ footer a {
 .gallery-item img {
     cursor: zoom-in;
 }
+
+
+#about {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(255, 154, 158, 0.08), rgba(254, 207, 239, 0.06));
+}
+
+#about h2 {
+    font-size: 2.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+    position: relative;
+    display: inline-block;
+}
+
+#about h2::before {
+    content: "info";
+    font-family: 'Material Symbols Outlined';
+    margin-right: 0.6rem;
+    color: var(--primary);
+    font-size: 2.2rem;
+    vertical-align: middle;
+}
+
+.about-content {
+    max-width: 780px;
+    margin: 0 auto;
+    font-size: 1.15rem;
+    color: #444;
+    line-height: 1.8;
+}
+
+.about-content p {
+    margin-bottom: 1.6rem;
+}
+
+.about-content p:last-child {
+    margin-bottom: 2.5rem;
+}
+
+.about-highlights {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.2rem;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.about-highlights li {
+    background: var(--light);
+    padding: 1.4rem 1.2rem;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(255, 154, 158, 0.12);
+    border: 1px solid rgba(255, 154, 158, 0.18);
+    font-weight: 500;
+    color: var(--dark);
+    position: relative;
+    transition: all 0.28s ease;
+}
+
+.about-highlights li:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(255, 154, 158, 0.22);
+}
+
+.about-highlights li::before {
+    content: "check_circle";
+    font-family: 'Material Symbols Outlined';
+    color: var(--primary);
+    font-size: 1.6rem;
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.about-highlights li span {
+    display: block;
+    padding-left: 2.8rem;
+    text-align: left;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    #about {
+        padding: 4.5rem 1.5rem;
+    }
+
+    #about h2 {
+        font-size: 2.4rem;
+    }
+
+    .about-content {
+        font-size: 1.05rem;
+    }
+
+    .about-highlights {
+        grid-template-columns: 1fr;
+    }
+
+    .about-highlights li {
+        padding: 1.3rem 1.1rem 1.3rem 4.2rem;
+    }
+}
