@@ -468,7 +468,7 @@ select option:checked {
     bottom: 0;
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    /* align-items: flex-end; */
     width: 100%;
     margin-top: 1rem;
     gap: 0.5rem;
@@ -487,7 +487,6 @@ select option:checked {
     align-self: flex-end;
 }
 
-/* Payment buttons container */
 .payment-buttons {
     display: flex;
     flex-direction: column;
@@ -497,21 +496,12 @@ select option:checked {
 
 /* For mobile responsiveness */
 @media (max-width: 768px) {
-    .cardBtns {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
     .cardBtns .btn:last-child {
         align-self: flex-end;
         margin-top: 0.5rem;
         width: auto;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
-    }
-    
-    .payment-buttons {
-        flex-direction: column;
     }
 }
 
