@@ -750,11 +750,11 @@ document.addEventListener('click', (e) => {
         removeItem(id);
     }
 
-    // else if (target.closest('.gallery-item')) {
-    //     const galleryItem = target.closest('.gallery-item');
-    //     const index = parseInt(galleryItem.dataset.galleryIndex);
-    //     openModal(index);
-    // }
+    else if (target.closest('.gallery-item')) {
+        const galleryItem = target.closest('.gallery-item');
+        const index = parseInt(galleryItem.dataset.galleryIndex);
+        openModal(index);
+    }
 
     // Image modal trigger (works for both gallery and products)
     else if (target.tagName === 'IMG' && target.hasAttribute('data-modal-src')) {
