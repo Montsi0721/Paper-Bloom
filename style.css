@@ -495,10 +495,9 @@ select option:checked {
     }
 
     .cardBtns .btn:last-child {
-        position: sticky;
-        bottom: 10px;
-        right: 10px;
         width: fit-content;
+        margin-left: 70%;
+
     }
 }
 
