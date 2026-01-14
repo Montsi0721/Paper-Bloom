@@ -760,13 +760,11 @@ document.addEventListener('click', (e) => {
             hideNavbarTimeout = setTimeout(hideNavbar, 2000);
         }
     } else {
-        // Show navbar when interacting with it
         showNavbar();
     }
 
     const target = e.target;
 
-    // Handle Add to Cart buttons
     if (target.matches('[data-action="add-to-cart"]') || target.closest('[data-action="add-to-cart"]')) {
         const btn = target.matches('[data-action="add-to-cart"]') ? target : target.closest('[data-action="add-to-cart"]');
         const id = btn.dataset.productId;
@@ -775,7 +773,6 @@ document.addEventListener('click', (e) => {
         addToCart(id, name, price);
     }
 
-    // Handle cart quantity controls
     else if (target.matches('[data-action="increase-qty"]')) {
         const id = target.dataset.itemId;
         updateQuantity(id, 1);
@@ -822,11 +819,11 @@ document.addEventListener('click', (e) => {
     }
 
     // Handle gallery item clicks
-    else if (target.closest('.gallery-item')) {
-        const galleryItem = target.closest('.gallery-item');
-        const index = parseInt(galleryItem.dataset.galleryIndex);
-        openModal(index, galleryImages[index], ``);
-    }
+    // else if (target.closest('.gallery-item')) {
+    //     const galleryItem = target.closest('.gallery-item');
+    //     const index = parseInt(galleryItem.dataset.galleryIndex);
+    //     openModal(index, galleryImages[index], ``);
+    // }
 
     // Handle product image clicks (new)
     else if (target.classList.contains('product-image') && target.hasAttribute('data-modal-src')) {
@@ -847,12 +844,6 @@ document.addEventListener('keydown', (e) => {
         closeModal();
         toggleTrackOrder();
     }
-
-    // Also close modal by clicking outside
-    // const modal = document.getElementById('galleryModal');
-    // if (e.target === modal) {
-    //     closeModal();
-    // }
 
     // Handle modal outside click
     const galleryModal = document.getElementById('galleryModal');
