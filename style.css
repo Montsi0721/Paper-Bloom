@@ -241,7 +241,7 @@ select option:checked {
 }
 
 .product-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-5px);
 }
 
 .product-card:hover .product-image {
@@ -896,7 +896,7 @@ footer a {
     top: -0.6rem;
     left: 0.8rem;
     font-size: 0.8rem;
-    color: var(--primary);
+    border: 2px solid var(--primary);
     background: white;
     padding: 0 0.3rem;
     border-radius: 4px;
