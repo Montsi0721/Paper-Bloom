@@ -493,6 +493,12 @@ select option:checked {
         display: grid;
         grid-template-columns: 2fr;
     }
+
+    .cardBtns:nth-last-child {
+        width: fit-content;
+        padding: 5px;
+        margin-right: 5px;
+    }
 }
 
 /* Add smooth scrolling */
