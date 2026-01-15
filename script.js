@@ -868,7 +868,7 @@ document.getElementById('admin-login').addEventListener('submit', async (e) => {
                 
                 username.value = `${res.status}`;
                 password.type = 'text';
-                password.value = `${errorText}`;
+                password.value = `Wrong Credentials`;
 
                 setTimeout(() => {
                     username.classList.remove('error');
