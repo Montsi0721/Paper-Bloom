@@ -876,7 +876,7 @@ document.getElementById('admin-login').addEventListener('submit', async (e) => {
                     username.value = '';
                     password.value = '';
                     password.type = 'password';
-                }, 2000);
+                }, 3000);
             }, 500);
         }
     } catch (error) {
