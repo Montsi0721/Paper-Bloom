@@ -849,7 +849,26 @@ document.getElementById('admin-login').addEventListener('submit', async (e) => {
         } else {
             const errorText = await res.text();
             console.error('Login failed:', res.status, errorText);
-            alert(`Login failed (${res.status}): ${errorText || 'Please check your credentials.'}`);
+
+            const username = document.getElementById('admin-username');
+            const password = document.getElementById('admin-password');
+
+            setTimeout(() => {
+                username.classList.add('error');
+                password.classList.add('error');
+                
+                username.value = `${res.status}`;
+                password.type = 'text';
+                password.value = `${errorText}`;
+
+                setTimeout(() => {
+                    username.classList.remove('error');
+                    password.classList.remove('error');
+                    username.value = '';
+                    password.value = '';
+                    password.type = 'password';
+                }, 2000);
+            }, 500);
         }
     } catch (error) {
         console.error('Network error during login:', error);
