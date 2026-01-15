@@ -498,13 +498,6 @@ select option:checked {
     z-index: 1002;
 }
 
-.cart > div:nth-last-child(3) {
-    position: sticky;
-    bottom: 100px;
-    background: var(--light);
-    z-index: 1;
-}
-
 .cart-item {
     display: flex;
     align-items: center;
