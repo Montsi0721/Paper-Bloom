@@ -495,6 +495,7 @@ select option:checked {
 
 .payment-buttons .btn {
     margin-top: 10px;
+    z-index: 1002;
 }
 
 .cart > div:nth-last-child(3) {
