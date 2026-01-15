@@ -824,8 +824,17 @@ window.addEventListener('scroll', () => {
 document.getElementById('admin-login').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const loginBtn = e.target.querySelector('button[type="submit"]');
+    const btnText = loginBtn.querySelector('.btn-text');
+    const btnSpinner = loginBtn.querySelector('.btn-spinner');
+
     const username = document.getElementById('admin-username').value;
     const password = document.getElementById('admin-password').value;
+
+    loginBtn.classList.add('loading');
+    loginBtn.disabled = true;
+    btnText.style.opacity = '0';
+    btnSpinner.style.display = 'inline-block';
 
     try {
         const res = await fetch(`${API_URL_BASE}/admin/login`, {  // Fixed here
@@ -873,6 +882,11 @@ document.getElementById('admin-login').addEventListener('submit', async (e) => {
     } catch (error) {
         console.error('Network error during login:', error);
         alert('Network error. Please check if the server is running.');
+    } finally {
+        loginBtn.classList.remove('loading');
+        loginBtn.disabled = false;
+        btnText.style.opacity = '1';
+        btnSpinner.style.display = 'none';
     }
 });
 

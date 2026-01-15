@@ -964,6 +964,49 @@ footer a {
     padding-right: 50px;
 }
 
+/* ===== ADMIN LOGIN BUTTON LOADING STATE ===== */
+#admin-login .btn {
+    position: relative;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#admin-login .btn .btn-text {
+    transition: opacity 0.3s ease;
+}
+
+#admin-login .btn .btn-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#admin-login .btn .btn-spinner .login-loader {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fff;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    animation: rotation 1s linear infinite;
+}
+
+#admin-login .btn.loading .btn-text {
+    opacity: 0;
+}
+
+#admin-login .btn.loading .btn-spinner {
+    display: inline-block;
+}
+
+#admin-login .btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
 /* ===== LOADER ===== */
 .loader {
     width: 48px;
