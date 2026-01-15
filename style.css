@@ -902,6 +902,25 @@ footer a {
     background: white;
 }
 
+#admin-login input.error:focus + label,
+#admin-login input.error:not(:placeholder-shown) + label {
+    border: 2px solid red;
+    color: red;
+}
+
+#admin-login input.error:focus,
+#admin-login input.error:not(:placeholder-shown) {
+    border: 2px solid red;
+    background: white;
+}
+
+#admin-login input.error + label,
+#admin-login input.error{
+    border: 2px solid red;
+    color: red;
+    background: white;
+}
+
 .password-toggle-btn {
     position: absolute;
     right: 10px;
